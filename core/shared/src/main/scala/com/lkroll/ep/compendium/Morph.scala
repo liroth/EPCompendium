@@ -1,42 +1,28 @@
 package com.lkroll.ep.compendium
 
-import utils.OptionPickler.{ ReadWriter => RW, macroRW }
+import enumeratum._
+import utils.OptionPickler.{ ReadWriter => RW, macroRW, UPickleEnum }
 
-sealed trait MorphType extends ChatRenderable {
-  def label: String;
+sealed trait MorphType extends EnumEntry with ChatRenderable {
+  def label: String = this.entryName;
   override def templateKV: Map[String, String] = Map("Morph Type" -> label);
 }
-object MorphType {
-  implicit def rw: RW[MorphType] = RW.merge(
-    macroRW[Biomorph.type],
-    macroRW[Infomorph.type],
-    macroRW[Pod.type],
-    macroRW[Synthmorph.type]);
+object MorphType extends Enum[MorphType] with UPickleEnum[MorphType] {
+  case object Biomorph extends MorphType;
+  case object Infomorph extends MorphType;
+  case object Pod extends MorphType;
+  case object Synthmorph extends MorphType;
 
-  @upickle.key("Biomorph")
-  case object Biomorph extends MorphType {
-    override def label: String = "Biomorph";
-  }
-  @upickle.key("Infomorph")
-  case object Infomorph extends MorphType {
-    override def label: String = "Infomorph";
-  }
-  @upickle.key("Pod")
-  case object Pod extends MorphType {
-    override def label: String = "Pod";
-  }
-  @upickle.key("Synthmorph")
-  case object Synthmorph extends MorphType {
-    override def label: String = "Synthmorph";
-  }
+  val values = findValues;
 }
 
 case class MorphModel(name: String, morphType: MorphType, descr: String,
                       enhancements: Seq[String], traits: Seq[String] = Seq.empty,
                       movement: Seq[String] = Seq("Walker 4/20"), aptitudeMax: AptitudeValues,
-                      aptitudeBonus: AptitudeValues = AptitudeValues.none, skillBonus: Seq[SkillMod] = Seq.empty,
-                      playerDecisions: Option[String] = None, attacks: Seq[Weapon] = Seq.empty,
-                      durability: Int, armour: Option[(Int, Int)] = None, cpCost: Int, price: Cost, source: String) extends ChatRenderable {
+                      aptitudeBonus: AptitudeValues = AptitudeValues.none,
+                      otherEffects:  List[Effect]   = List.empty, playerDecisions: Option[String] = None,
+                      attacks: Seq[Weapon] = Seq.empty, durability: Int, armour: Option[(Int, Int)] = None,
+                      cpCost: Int, price: Cost, source: String) extends ChatRenderable with Data {
 
   override def templateTitle: String = name;
   override def templateSubTitle: String = morphType.label
@@ -47,7 +33,7 @@ case class MorphModel(name: String, morphType: MorphType, descr: String,
       "Movement" -> movement.mkString(", "),
       "Aptitude Maximum" -> aptitudeMax.maxString,
       "Aptitude Boni" -> aptitudeBonus.boniString,
-      "Skill Boni" -> skillBonus.map(b => b.bonusString).mkString(", "),
+      "Effects" -> otherEffects.map(b => b.text).mkString(", "),
       "Player Decisions" -> playerDecisions.getOrElse("none"),
       "Attacks" -> attacks.map(a => a.summaryString).mkString(", "),
       "Durability" -> durability.toString(),
@@ -56,6 +42,7 @@ case class MorphModel(name: String, morphType: MorphType, descr: String,
       "Source" -> source) ++
       price.templateKV;
   override def templateDescr: String = descr;
+  override def described: DescribedData = DescribedData.MorphModelD(this);
 }
 object MorphModel {
   implicit def rw: RW[MorphModel] = macroRW;
@@ -67,8 +54,8 @@ case class MorphInstance(label: String, model: String, morphType: MorphType, des
                          visibleGender: Option[String] = None, visibleAge: Option[Int] = None, location: Option[String] = None,
                          enhancements: Seq[String], traits: Seq[String] = Seq.empty,
                          movement: Seq[String] = Seq("Walker 4/20"), aptitudeMax: AptitudeValues,
-                         aptitudeBonus: AptitudeValues = AptitudeValues.none, skillBonus: Seq[SkillMod] = Seq.empty,
-                         attacks: Seq[Weapon] = Seq.empty, durability: Int, armour: Option[(Int, Int)] = None) extends ChatRenderable {
+                         aptitudeBonus: AptitudeValues = AptitudeValues.none, otherEffects: List[Effect] = List.empty,
+                         attacks: Seq[Weapon] = Seq.empty, durability: Int, armour: Option[(Int, Int)] = None) extends ChatRenderable with Data {
 
   override def templateTitle: String = s"$label ($model)";
   override def templateSubTitle: String = morphType.label
@@ -83,11 +70,12 @@ case class MorphInstance(label: String, model: String, morphType: MorphType, des
       "Movement" -> movement.mkString(", "),
       "Aptitude Maximum" -> aptitudeMax.maxString,
       "Aptitude Boni" -> aptitudeBonus.boniString,
-      "Skill Boni" -> skillBonus.map(b => b.bonusString).mkString(", "),
+      "Effects" -> otherEffects.map(b => b.text).mkString(", "),
       "Attacks" -> attacks.map(a => a.summaryString).mkString(", "),
       "Durability" -> durability.toString(),
       "Armour" -> armour.map(t => s"${t._1}/${t._2}").getOrElse("0/0"));
   override def templateDescr: String = descr;
+  override def described: DescribedData = DescribedData.MorphInstanceD(this);
 }
 object MorphInstance {
   implicit def rw: RW[MorphInstance] = macroRW;
@@ -105,7 +93,7 @@ object MorphInstance {
       movement = model.movement,
       aptitudeMax = model.aptitudeMax,
       aptitudeBonus = model.aptitudeBonus,
-      skillBonus = model.skillBonus,
+      otherEffects = model.otherEffects,
       attacks = model.attacks,
       durability = model.durability,
       armour = model.armour)
@@ -167,16 +155,4 @@ object AptitudeValues {
 
   def max(all: Int): AptitudeValues = AptitudeValues(Some(all), Some(all), Some(all), Some(all), Some(all), Some(all), Some(all));
   def none: AptitudeValues = AptitudeValues();
-}
-
-case class SkillMod(skill: String, field: Option[String] = None, mod: Int) {
-  def bonusString: String = field match {
-    case Some(f) if mod > 0  => s"+$mod $skill ($f) skill"
-    case Some(f) if mod <= 0 => s"$mod $skill ($f) skill"
-    case None if mod > 0     => s"+$mod $skill skill"
-    case None if mod <= 0    => s"$mod $skill skill"
-  }
-}
-object SkillMod {
-  implicit def rw: RW[SkillMod] = macroRW;
 }

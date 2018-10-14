@@ -4,13 +4,13 @@ import com.lkroll.ep.compendium._
 import com.lkroll.common.macros.Macros
 
 object MorphAttacks {
+  import FiringMode._;
+
   val beakAttack = Weapon(
     name = "Beak/Claw Attack",
     `type` = WeaponType.Unarmed,
     descr = "Beak/Claw Attack",
-    dmgD10 = 1,
-    dmgConst = 1,
-    dmgType = DamageType.Kinetic,
+    damage = (1.d10 + 1).kinetic,
     effect = None,
     ap = -1,
     price = Cost.None,
@@ -21,98 +21,167 @@ object MorphAttacks {
     name = "Beak Laser",
     `type` = WeaponType.Beam,
     descr = "Custom Hand Laser mounted on top of the Blackbird's beak. Makes it look a bit like a Toucan.",
-    dmgD10 = 2,
-    dmgConst = 0,
-    dmgType = DamageType.Energy,
+    damage = (2.d10 + 0).energy,
     effect = None,
     ap = 0,
     price = Cost.Moderate,
     range = Range.Ranged(30, 80, 125, 230),
+    gun = GunExtras(
+      modes = Set(SS), // doesn't really say
+      magazineSize = 50),
+    source = Sources.ep);
+
+  val handLaser = Weapon(
+    name = "Hand Laser",
+    `type` = WeaponType.Beam,
+    descr = "Weapon-grade Laser implanted into the morph's forearm.",
+    damage = (2.d10 + 0).energy,
+    effect = None,
+    ap = 0,
+    price = Cost.Moderate,
+    range = Range.Ranged(30, 80, 125, 230),
+    gun = GunExtras(
+      modes = Set(SS), // doesn't really say
+      magazineSize = 50),
     source = Sources.ep);
 
   val bite = Weapon(
     name = "Bite",
     `type` = WeaponType.Unarmed,
     descr = "Bite",
-    dmgD10 = 1,
-    dmgConst = 1,
-    dmgType = DamageType.Kinetic,
+    damage = (1.d10 + 1).kinetic,
     effect = None,
     ap = -1,
     price = Cost.None,
     range = Range.Melee,
-<<<<<<< HEAD
-    source = Sources.ep  
-    );
+    source = Sources.ep);
 
   val claw = Weapon(
     name = "Claw",
     `type` = WeaponType.Unarmed,
     descr = "Claw Attack",
-    dmgD10 = 2,
-    dmgConst = 0,
-    dmgType = DamageType.Kinetic,
+    damage = (2.d10 + 0).kinetic,
     effect = None,
     ap = 0,
     price = Cost.None,
     range = Range.Melee,
-    source = Sources.ep  
-    );
-=======
     source = Sources.ep);
->>>>>>> 66d900f69248cc4ad636174b58b0ec29e3e6fc5a
+
+  val bioClaw = Weapon(
+    name = "Bioware Claw",
+    `type` = WeaponType.Unarmed,
+    descr = "Claw Attack",
+    damage = (1.d10 + 1).kinetic,
+    effect = None,
+    ap = -1,
+    price = Cost.None,
+    range = Range.Melee,
+    source = Sources.ep);
+
+  val cyberClaw = Weapon(
+    name = "Cyberclaw",
+    `type` = WeaponType.Unarmed,
+    descr = "Claw Attack",
+    damage = (1.d10 + 3).kinetic,
+    effect = None,
+    ap = -2,
+    price = Cost.None,
+    range = Range.Melee,
+    source = Sources.ep);
+
+  val diggingClaw = Weapon(
+    name = "Digging Claw",
+    `type` = WeaponType.Unarmed,
+    descr = "Claw Attack",
+    damage = (1.d10 + 2).kinetic,
+    effect = None,
+    ap = -1,
+    price = Cost.None,
+    range = Range.Melee,
+    source = Sources.ep);
 
   val disassemblyTools = Weapon(
     name = "Disassembly Tools",
     `type` = WeaponType.Unarmed,
     descr = "Melee attacks with the large-size frame or disassembly tools",
-    dmgD10 = 3,
-    dmgConst = 0, //TODO insert calculation: (SOM / 10)
-    dmgType = DamageType.Kinetic,
+    damage = (3.d10 + 0).kinetic,
     effect = None,
     ap = -5,
     price = Cost.None,
     range = Range.Melee,
-<<<<<<< HEAD
-    source = Sources.ep  
-    );
+    source = Sources.ep);
 
   val neoAvianBeak = Weapon(
     name = "Beak/Claw Attack",
     `type` = WeaponType.Unarmed,
     descr = "Beak/Claw Attack",
-    dmgD10 = 1,
-    dmgConst = 1,
-=======
-    source = Sources.ep);
-
-  val octomorphBeak = Weapon(
-    name = "Beak Attack",
-    `type` = WeaponType.Unarmed,
-    descr = "Beak Attack",
-    dmgD10 = 1,
-    dmgConst = 0,
->>>>>>> 66d900f69248cc4ad636174b58b0ec29e3e6fc5a
-    dmgType = DamageType.Kinetic,
+    damage = (1.d10 + 1).kinetic,
     effect = None,
     ap = -1,
     price = Cost.None,
     range = Range.Melee,
     source = Sources.mrg);
 
-<<<<<<< HEAD
   val neoOrcaBite = Weapon(
     name = "Bite",
     `type` = WeaponType.Unarmed,
     descr = "Bite",
-=======
+    damage = (2.d10 + 0).kinetic,
+    effect = None,
+    ap = 0,
+    price = Cost.None,
+    range = Range.Melee,
+    source = Sources.ep);
+
+  val ramming = Weapon(
+    name = "Ramming Attack",
+    `type` = WeaponType.Unarmed,
+    descr = "Ramming Attack",
+    damage = (1.d10 + 0).kinetic,
+    effect = None,
+    ap = 0,
+    price = Cost.None,
+    range = Range.Melee,
+    source = Sources.mrg);
+
+  val neoWhaleRamming = Weapon(
+    name = "Bite",
+    `type` = WeaponType.Unarmed,
+    descr = "Bite",
+    damage = (4.d10 + 0).kinetic,
+    effect = None,
+    ap = 0,
+    price = Cost.None,
+    range = Range.Melee,
+    source = Sources.mrg);
+
+  val neoWhaleBite = Weapon(
+    name = "Ramming Attack",
+    `type` = WeaponType.Unarmed,
+    descr = "Ramming Attack",
+    damage = (2.d10 + 0).kinetic,
+    effect = None,
+    ap = 0,
+    price = Cost.None,
+    range = Range.Melee,
+    source = Sources.mrg);
+
+  val octomorphBeak = Weapon(
+    name = "Beak Attack",
+    `type` = WeaponType.Unarmed,
+    descr = "Beak Attack",
+    damage = (1.d10 + 0).kinetic,
+    effect = None,
+    ap = -1,
+    price = Cost.None,
+    range = Range.Melee,
+    source = Sources.mrg);
+
   val octomorphInk = Weapon(
     name = "Ink Attack",
     `type` = WeaponType.ExoticRangedWeapon("Ink"),
     descr = "Ink Attack - blinding, use Exotic Ranged: Ink Attack skill",
-    dmgD10 = 0,
-    dmgConst = 0,
-    dmgType = DamageType.Kinetic,
+    damage = (0.d10 + 0).kinetic,
     effect = Some("Blinding"),
     ap = 0,
     price = Cost.None,
@@ -124,77 +193,40 @@ object MorphAttacks {
     name = "Q-Morph Claw attack",
     `type` = WeaponType.Unarmed,
     descr = "Q-Morph Claw attack",
->>>>>>> 66d900f69248cc4ad636174b58b0ec29e3e6fc5a
-    dmgD10 = 2,
-    dmgConst = 0,
-    dmgType = DamageType.Kinetic,
+    damage = (2.d10 + 0).kinetic,
     effect = None,
     ap = 0,
     price = Cost.None,
     range = Range.Melee,
-<<<<<<< HEAD
-    source = Sources.ep  
-    );
-
-  val ramming = Weapon(
-    name = "Ramming Attack",
-    `type` = WeaponType.Unarmed,
-    descr = "Ramming Attack",
-=======
     source = Sources.mrg);
 
   val ripwingAttack = Weapon(
     name = "Ripwing Beak/Claw attack",
     `type` = WeaponType.Unarmed,
     descr = "Ripwing Beak/Claw attack",
->>>>>>> 66d900f69248cc4ad636174b58b0ec29e3e6fc5a
-    dmgD10 = 1,
-    dmgConst = 0,
-    dmgType = DamageType.Kinetic,
+    damage = (1.d10 + 0).kinetic,
     effect = None,
     ap = 0,
     price = Cost.None,
     range = Range.Melee,
     source = Sources.mrg);
 
-<<<<<<< HEAD
-  val neoWhaleRamming = Weapon(
-    name = "Bite",
-    `type` = WeaponType.Unarmed,
-    descr = "Bite",
-    dmgD10 = 4,
-    dmgConst = 0,
-=======
   val takkoBeak = Weapon(
     name = "Takko Beak Attack",
     `type` = WeaponType.Unarmed,
     descr = "Takko Beak Attack",
-    dmgD10 = 1,
-    dmgConst = 2,
->>>>>>> 66d900f69248cc4ad636174b58b0ec29e3e6fc5a
-    dmgType = DamageType.Kinetic,
+    damage = (1.d10 + 2).kinetic,
     effect = None,
     ap = 0,
     price = Cost.None,
     range = Range.Melee,
     source = Sources.mrg);
-<<<<<<< HEAD
 
-  val neoWhaleBite = Weapon(
-    name = "Ramming Attack",
-    `type` = WeaponType.Unarmed,
-    descr = "Ramming Attack",
-    dmgD10 = 2,
-=======
-  
   val whiplashTendril = Weapon(
     name = "Whiplash Tendril Attack",
     `type` = WeaponType.Unarmed,
     descr = "Whiplash Tendril Attack - +10 to disarming called shot attacks",
-    dmgD10 = 1,
->>>>>>> 66d900f69248cc4ad636174b58b0ec29e3e6fc5a
-    dmgConst = 0,
-    dmgType = DamageType.Kinetic,
+    damage = (1.d10 + 0).kinetic,
     effect = None,
     ap = 0,
     price = Cost.None,

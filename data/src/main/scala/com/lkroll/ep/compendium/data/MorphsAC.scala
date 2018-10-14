@@ -8,6 +8,7 @@ object MorphsAC {
   import MorphType._
   import Cost._
   import Sources._
+  import Effect._
 
   val aquanaut = MorphModel(
     name = "Aquanaut",
@@ -18,7 +19,7 @@ object MorphsAC {
     movement = Seq("Walker 4/20", "Swimming 2/10"),
     aptitudeMax = 30,
     aptitudeBonus = AptitudeValues(coo = 5, som = 10),
-    skillBonus = Seq(("Swimming" -> 10)),
+    otherEffects = List(SkillMod(skill = "Swimming", mod = 10)),
     playerDecisions = Some("+5 to one other aptitude"),
     durability = 40,
     cpCost = 50,
@@ -58,7 +59,7 @@ object MorphsAC {
     morphType = Biomorph,
     descr = "The surprising number of transhumans who chose to sleeve in Titan-adapted hulder morphs encouraged designers on Profunda to develop a Titan-adapted flyer. While the sturdy hulder morph is designed for nomadic herders, the ariel morph is designed by people who wish to survive by hunting. Individuals sleeved in the ariel morph can hunt and eat Titanian caribou, but they most often eat the smaller rabbit-like creatures that Profunda designers have also recently designed to live on Titan. Ariel morphs have exotic-looking heads similar to those of hulder morphs, but they also possess sleek and streamlined humanoid bodies with four limbs and a pair of bat-like wings. These morphs have also been used by a few daring transhumans to explore the upper cloud layers of both Saturn and Uranus.",
     enhancements = Seq("Basic Biomods", "Basic Mesh Inserts", "Bioweave Armor (Light)", "Claws", "Cortical Stack", "Direction Sense", "Enhanced Vision", "Long-Term Life Support", "Low Pressure Tolerance", "Oxygen Reserve", "Prehensile Feet", "Radiation Sense", "T-Ray Emitter", "Temperature Tolerance (Cryonic)", "Wings"),
-    traits = Seq("Temerature Intolerance (Warm)", "Non-Mammalian Biochemistry"),
+    traits = Seq("Temerature Intolerance (Warm)", "Non Mammalian Biochemistry"),
     movement = Seq("Walker 4/20", "Winged 8/40"),
     aptitudeMax = 30,
     aptitudeBonus = AptitudeValues(cog = 5, ref = 5),
@@ -119,7 +120,7 @@ object MorphsAC {
     movement = Seq("Walker 2/16", "Hopper 4/20", "Winged 8/40"),
     aptitudeMax = 30.copy(som = Some(20)),
     aptitudeBonus = AptitudeValues(coo = 5, ref = 5),
-    skillBonus = Seq(("Flight" -> 10), ("Infiltration" -> 10)),
+    otherEffects = List(SkillMod(skill = "Flight", mod = 10), SkillMod(skill = "Infiltration", mod = 10)),
     playerDecisions = Some("+5 to one other aptitude"),
     attacks = Seq(MorphAttacks.beakAttack),
     durability = 25,
@@ -151,7 +152,7 @@ object MorphsAC {
     traits = Seq("Unattractive (Level 1)", "Large Size"),
     aptitudeMax = 30.copy(som = Some(40)),
     aptitudeBonus = AptitudeValues(som = 15, ref = 5),
-    skillBonus = Seq(("Intimidation" -> 10)),
+    otherEffects = List(SkillMod(skill = "Intimidation", mod = 10)),
     playerDecisions = Some("+5 to one other aptitude"),
     durability = 60,
     cpCost = 60,

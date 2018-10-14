@@ -4,10 +4,11 @@ import com.lkroll.ep.compendium._
 import com.lkroll.common.macros.Macros
 
 object MorphsOR {
-  import MorphImplicits._
-  import MorphType._
-  import Cost._
-  import Sources._
+  import MorphImplicits._;
+  import MorphType._;
+  import Cost._;
+  import Sources._;
+  import Effect._;
 
   val observer = MorphModel(
     name = "Observer",
@@ -34,7 +35,7 @@ object MorphsOR {
     aptitudeBonus = AptitudeValues(coo = 5, int = 5),
     playerDecisions = Some("+5 to one other aptitude"),
     attacks = Seq(MorphAttacks.octomorphBeak, MorphAttacks.octomorphInk),
-    skillBonus = Seq(("Swimming" -> 30), ("Climbing" -> 10)),
+    otherEffects = List(SkillMod(skill = "Swimming", mod = 30), SkillMod(skill = "Climbing", mod = 10)),
     traits = Seq("Non-Mammalian Biochemistry"),
     cpCost = 50,
     price = ExpensivePlus(30000),
@@ -63,7 +64,7 @@ object MorphsOR {
     aptitudeMax = 30, //TODO 25 SOM ???
     aptitudeBonus = AptitudeValues(coo = 5, int = 5, ref = 5),
     playerDecisions = Some("+5 to one other aptitude"),
-    skillBonus = Seq(("Climbing" -> 10), ("Flight" -> 10)),
+    otherEffects = List(SkillMod(skill = "Flight", mod = 10), SkillMod(skill = "Climbing", mod = 10)),
     traits = Seq("Small size"),
     armour = (2, 2),
     durability = 25,
@@ -111,7 +112,8 @@ object MorphsOR {
     movement = Seq("Walker 4/20", "Hopper 4/20", "Ionic 12/40", "Vectored Thrust 4/20"),
     aptitudeMax = 40,
     aptitudeBonus = AptitudeValues(coo = 5, ref = 10, som = 10),
-    durability = 60, //TODO 50 base, 60 with structural enhancement
+    otherEffects = List(SpeedMod(1)),
+    durability = 60,
     armour = (16, 16),
     cpCost = 100,
     price = ExpensivePlus(50000),
@@ -167,6 +169,23 @@ object MorphsOR {
     morphType = Synthmorph,
     descr = "Rover morphs are a smaller, defense-oriented version of the sphere morph. Each rover is 0.6 meters in diameter and, with its limbs retracted, has the ominous appearance of a reflective, shiny, black globe. It can extrude three arms, each with a built-in weapon: extendable claws, a small laser, and a heavy rail pistol loaded with 200 rounds of ammunition. Rovers are stealthy and highly maneuverable and so favored for bodyguard and police purposes in some areas. They are often deployed via remote control.",
     enhancements = Seq("360-Degree Vision", "Access Jacks", "Basic Mesh Inserts", "Chameleon Skin", "Cyberclaws", "Cortical Stack", "Cyberbrain", "Enhanced Vision", "Extra Limbs (3 Arms)", "Gas-Jet System", "Hand Laser", "Mnemonic Augmentation", "Neurachem (Level 1)", "Puppet Sock", "Radar Absorbent", "Reduced Signature", "T-Ray Emitter", "Telescoping Limbs", "Weapon Mount (Articulated, Heavy Rail Pistol)"), // TODO speed+1
+    movement = Seq("Roller 8/32", "Thrust Vector 12/40"),
+    aptitudeMax = 30,
+    aptitudeBonus = AptitudeValues(int = 5, coo = 5, ref = 5),
+    traits = Seq("Small size"),
+    durability = 25,
+    armour = (10, 10),
+    cpCost = 60,
+    price = ExpensivePlus(60000),
+    source = mrg);
+
+  val roverSpaceFighter = MorphModel(
+    name = "Rover (Space Fighter Variant))",
+    morphType = Synthmorph,
+    descr = """Rover morphs are a smaller, defense-oriented version of the sphere morph. Each rover is 0.6 meters in diameter and, with its limbs retracted, has the ominous appearance of a reflective, shiny, black globe. It can extrude three arms, each with a built-in weapon: extendable claws, a small laser, and a heavy rail pistol loaded with 200 rounds of ammunition. Rovers are stealthy and highly maneuverable and so favored for bodyguard and police purposes in some areas. They are often deployed via remote control.
+===
+This version of the rover is fitted with a miniature metallic-hydrogen rocket with an acceleration up to 0.25 g, so that it is useful in short-range space battles. Several of these morphs can be launched from a spaceship to attack another ship or a habitat.""",
+    enhancements = Seq("360-Degree Vision", "Access Jacks", "Basic Mesh Inserts", "Chameleon Skin", "Cyberclaws", "Cortical Stack", "Cyberbrain", "Enhanced Vision", "Extra Limbs (3 Arms)", "Gas-Jet System", "Hand Laser", "Internal Rocket", "Mnemonic Augmentation", "Neurachem (Level 1)", "Puppet Sock", "Radar Absorbent", "Reduced Signature", "T-Ray Emitter", "Telescoping Limbs", "Weapon Mount (Articulated, Heavy Rail Pistol)"), // TODO speed+1
     movement = Seq("Roller 8/32", "Thrust Vector 12/40"),
     aptitudeMax = 30,
     aptitudeBonus = AptitudeValues(int = 5, coo = 5, ref = 5),
